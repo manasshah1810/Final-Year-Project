@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Image with Dynamic Hotspots</title>
+  <style>
+    /* Remove default margin and padding from the body and html to avoid borders */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Remove scrollbars */
+    }
+
+    .image-container {
+      position: relative;
+      width: 100%; /* Full width of the page */
+      height: 100vh; /* Full height of the viewport */
+      overflow: hidden; /* Ensure no overflow during zoom effect */
+    }
+
+    /* Both images in the same container, stacked on top of each other */
+    .image-container img {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%; /* Full height */
+      width: 40%;  /* 40% of the container width */
+      transition: transform 1s ease-in-out, opacity 1s ease-in-out; /* Smooth transition */
+      transform-origin: center; /* Anchor the zoom effect at the center */
+    }
+
+    /* Hotspots for dynamic usage */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 2;
+      display: none; /* Initially hidden */
+      background-color: red; /* Red color for testing */
+      opacity: 0.5; /* Semi-transparent for visibility */
+    }
+
+    /* Show hotspots dynamically when needed */
+    .hotspot.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="image-container">
+  <!-- Current Image (visible initially) -->
+  <img id="image1" src="Photos/StoryLine.jpeg" alt="Storyline Image">
+  
+  <!-- New Image (hidden initially) -->
+  <img id="image2" src="Photos/Door.png" alt="Door Image" style="opacity: 0; transform: scale(0.8);">
+  
+  <!-- Hotspots (dynamic, with different dimensions) -->
+  <div class="hotspot" id="hotspot1" style="top: 599px; left: 298px; width: 91px; height: 135px;"></div> <!-- Hotspot for Image 1 -->
+  <div class="hotspot" id="hotspot2" style="top: 311px; left: 268px; width: 146px; height: 28px;"></div> <!-- Hotspot for Image 2 -->
+  <div class="hotspot" id="hotspot3" style="top: 379px; left: 192px; width: 314px; height: 442px;"></div> <!-- Hotspot for Image 2 -->
+</div>
+
+<script>
+  // Add event listeners for hotspots
+  document.getElementById('hotspot1').addEventListener('click', function() {
+    transitionImagesWithZoom('image1', 'image2', 'hotspot1', 'hotspot2', 'hotspot3');
+  });
+
+  document.getElementById('hotspot3').addEventListener('click', function() {
+    alert("Please write down the secret text to unlock the door");
+  });
+
+  document.getElementById('hotspot2').addEventListener('click', function() {
+    alert("Unlock the Door using this secret code: RETNE OT ERAD TON OD");
+  });
+
+  // Function to handle zoom-in image transition and manage hotspots
+  function transitionImagesWithZoom(currentImageId, newImageId, currentHotspotId, newHotspotId, secondaryHotspotId) {
+    const currentImage = document.getElementById(currentImageId);
+    const newImage = document.getElementById(newImageId);
+    const currentHotspot = document.getElementById(currentHotspotId);
+    const newHotspot = document.getElementById(newHotspotId);
+    const secondaryHotspot = document.getElementById(secondaryHotspotId);
+
+    // Fade out the current image
+    currentImage.style.opacity = 0;
+
+    // Fade in and zoom in the new image
+    newImage.style.opacity = 1;
+    newImage.style.transform = 'scale(1)'; // Zoom in to the original size (1x)
+
+    // Hide current hotspot and show new hotspots
+    currentHotspot.classList.remove('active');
+    newHotspot.classList.add('active');
+    secondaryHotspot.classList.add('active');
+  }
+
+  // Initialize hotspots
+  document.getElementById('hotspot1').classList.add('active'); // Show hotspot for Image 1
+</script>
+
+</body>
+</html>

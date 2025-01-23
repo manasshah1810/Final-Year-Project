@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Image</title>
+  <style>
+    body,html {
+      font-family: Arial, sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    .image-container {
+      position: relative;
+      display: inline-block;
+      height: 100%;
+    }
+
+    .image-container img {
+      display: block;
+      max-width: 100%;
+      height: 100%;
+    }
+
+    /* Visible hotspots with background color for debugging */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      background-color: rgba(255, 0, 0, 0.5); /* Red with transparency */
+    }
+
+    /* Hidden hint box */
+    .hint {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+<div class="image-container">
+  <img src="Photos/Lesson2.jpeg" alt="Interactive Scene">
+
+  <!-- Hotspots (Visible for debugging) -->
+  <div class="hotspot" id="hotspot1" style="top: 261px; left: 144px; width: 39px; height: 12px;"></div>
+  <div class="hotspot" id="hotspot2" style="top: 227px; left: 272px; width: 14px; height: 16px;"></div>
+  <div class="hotspot" id="hotspot3" style="top: 345px; left: 158px; width: 33px; height: 24px;"></div>
+
+  <!-- Hint Box -->
+  <div class="hint" id="hint1">Hint 1: Look under the table!</div>
+  <div class="hint" id="hint2">Hint 2: Check behind the door!</div>
+  <div class="hint" id="hint3">Hint 3: Investigate the bookshelf!</div>
+</div>
+
+<script>
+  // Add event listeners for hotspots
+  document.getElementById('hotspot1').addEventListener('click', function() {
+    toggleHint('hint1');
+  });
+
+  document.getElementById('hotspot2').addEventListener('click', function() {
+    toggleHint('hint2');
+  });
+
+  document.getElementById('hotspot3').addEventListener('click', function() {
+    toggleHint('hint3');
+  });
+
+  // Function to toggle hints
+  function toggleHint(hintId) {
+    const hint = document.getElementById(hintId);
+    if (hint.style.display === 'none' || hint.style.display === '') {
+      hint.style.display = 'block';
+    } else {
+      hint.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
