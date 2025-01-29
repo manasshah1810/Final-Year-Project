@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Lesson with Python Editor</title>
+  <style>
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Dark theme background with eerie vibes */
+    body {
+      background-color: #1a1a1a;
+      color: #f0f0f0;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Full-page layout */
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Left section (40%) */
+    .left-section {
+      width: 40%;
+      height: 100%;
+      background-color: #2d2d2d;
+      border-right: 2px solid #444;
+      position: relative;
+    }
+
+    /* Right section (60%) */
+    .right-section {
+      width: 60%;
+      height: 100%;
+      background-color: #2d2d2d;
+      border-left: 2px solid #444;
+    }
+
+    /* Full height iframe */
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: #333;
+    }
+
+    /* Help section with eerie atmosphere */
+    .help-section {
+      padding: 20px;
+      background: #333;
+      border-top: 2px solid #444;
+      text-align: center;
+      color: #f0f0f0;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      font-size: 18px;
+    }
+
+    /* Storyline Image */
+    .image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .image-container img {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+      filter: grayscale(50%) contrast(100%) brightness(80%);
+    }
+
+    /* Invisible clickable hotspots */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 2;
+      display: none;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+
+    .hotspot.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Hint Popup */
+    .hint-popup {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: none;
+      max-width: 90%;
+      width: 400px;
+      border: 1px solid #ff0000;
+    }
+
+    .hint-popup.active {
+      display: block;
+    }
+
+    .hint-popup h2 {
+      margin: 0;
+      color: #ff0000;
+    }
+
+    .hint-popup .content {
+      margin-top: 10px;
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+
+    .cancel-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ff5c5c;
+    }
+
+    .cancel-icon:hover {
+      color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Left Section with Storyline & Hints -->
+    <div class="left-section">
+      <div class="image-container">
+        <img id="image1" src="Photos/Lesson2.jpeg" alt="Storyline Image">        
+        <div class="hotspot" id="hotspot1" style="top: 368px; left: 60px; width: 25px; height: 73px;"></div>
+        <div class="hotspot" id="hotspot2" style="top: 249px; left: 25px; width: 42px; height: 65px;"></div>
+
+      </div>
+
+      <!-- Hints -->
+      <div id="hintPopup1" class="hint-popup">
+        <span class="cancel-icon" onclick="closeHint('hintPopup1')">×</span>
+        <h2>Hint 1</h2>
+        <div class="content">Numbers for Average : <br> 59, 67, 18, 83, 48</div>
+      </div>
+
+      <div id="hintPopup2" class="hint-popup">
+        <span class="cancel-icon" onclick="closeHint('hintPopup2')">×</span>
+        <h2>Hint 2</h2>
+        <div class="content">Find the correct average to unlock this safe</div>
+      </div>
+    </div>
+
+    <!-- Right Section with Python Editor -->
+    <div class="right-section">
+      <iframe id="pythonFrame" src="python.html"></iframe>
+    </div>
+  </div>
+
+  <script>
+
+window.addEventListener("message", function(event) { 
+    if (event.data && event.data.type === "pythonExecution") {
+        const outputText = event.data.output.trim();
+        const userCode = event.data.userCode.trim();
+
+        console.log("Received Output:", outputText);
+        console.log("Received Code:", userCode);
+
+        // Ensure the user defines the 'avg' variable and calculates it using + and /
+        const avgPattern = /\bavg\s*=\s*\(.*\+.*\)\s*\/\s*\d+/; 
+        const hasAvgCalculation = avgPattern.test(userCode);
+
+        if (!hasAvgCalculation) {
+            alert("You must calculate the average using + and / operators and store it in 'avg'!");
+            return; // Stop further execution
+        }
+
+        // Extract the actual value of 'avg' from the printed output
+        const match = outputText.match(/^Average : (\d+(\.\d+)?)$/); 
+
+        if (match) {
+            const avgValue = match[1]; // Extract the numeric value
+            console.log("Extracted avg value:", avgValue);
+
+            if (avgValue === "55" || avgValue === "55.0") { // Ensure the avg value is exactly 55
+                console.log("Redirecting to lesson4.html...");
+                window.location.href = "lesson4.html"; 
+            } else {
+                alert(`Incorrect output! The average should be 55, but got '${avgValue}'`);
+            }
+        } else {
+            alert("Incorrect output format! Please print exactly: 'Average : 55'");
+        }
+    }
+}, false);
+
+
+
+    document.getElementById('hotspot1').addEventListener('click', function() {
+      showHint('hintPopup1');
+    });
+
+    document.getElementById('hotspot2').addEventListener('click', function() {
+      showHint('hintPopup2');
+    });
+
+    function showHint(popupId) {
+      document.getElementById(popupId).classList.add('active');
+    }
+
+    function closeHint(popupId) {
+      document.getElementById(popupId).classList.remove('active');
+    }
+
+    document.getElementById('hotspot1').classList.add('active');
+    document.getElementById('hotspot2').classList.add('active');
+  </script>
+
+</body>
+</html>

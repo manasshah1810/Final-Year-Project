@@ -1,0 +1,25 @@
+"You see five mysterious numbers beside the door. To enter, you must figure out their secret pattern. Use mathematical operators (+, -, *, /, %) to calculate their average. Only then will you understand their true meaning."
+
+This way, users will naturally apply arithmetic operators to find the average:
+
+average
+=
+num1
++
+num2
++
+num3
++
+num4
++
+num5
+5
+average= 
+5
+num1+num2+num3+num4+num5
+​
+ 
+Once they find the correct average, they can move forward. You can also introduce comparison operators:
+
+"If the average is greater than 10, the door creaks open..."
+"If the average is less than 10, the room stays locked..."

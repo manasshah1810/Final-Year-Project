@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Python Editor</title>
+</head>
+<body>
+  <div style="height: 100%;">
+    <!-- iframe embedding python.html -->
+    <iframe id="pythonFrame" src="python.html" frameborder="0" style="width: 50%; height: 100%;"></iframe>
+  </div>
+
+  <!-- Placeholder for the content to be displayed as a <p> -->
+  <p id="pythonCodeOutput"></p>
+
+  <script>
+    // Function to get content of the editor in python.html
+    function getPythonEditorContent() {
+      // Access the iframe and its document content
+      var iframe = document.getElementById('pythonFrame');
+      var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      
+      // Get the editor (textarea with id="editor") inside the iframe
+      var editor = iframeDoc.getElementById('editor');
+      
+      // Get the content inside the editor (textarea)
+      var abc = editor.value;
+      
+      // Display the content in a <p> element with id="pythonCodeOutput"
+      document.getElementById("pythonCodeOutput").textContent = abc;
+    }
+
+    // Example: Calling the function after iframe has loaded the content
+    document.getElementById('pythonFrame').addEventListener('load', function() {
+      getPythonEditorContent();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+          // 🔥 Send output to abc.html
+          window.parent.postMessage({ type: "pythonOutput", output: output }, "*");

@@ -1,0 +1,39 @@
+📜 Ancient Scroll Found!
+"You've discovered the secret records of the haunted rooms! But to escape, you must store them correctly using magic runes (variables)."
+
+Task: Store the Information in Variables
+A ghostly voice whispers:
+"Store the room details in magical memory scrolls before the darkness consumes you!"
+
+python
+Copy
+Edit
+# Store the room details as variables
+room_1_no = "3A"
+room_1_name = "Games Room"
+
+room_2_no = "3B"
+room_2_name = "Dance Room"
+
+room_3_no = "3C"
+room_3_name = "Music Room"
+
+# Display the stored information
+print("Room", room_1_no, ":", room_1_name)
+print("Room", room_2_no, ":", room_2_name)
+print("Room", room_3_no, ":", room_3_name)
+🔑 Escape Room Challenge
+💡 "Use these magic words (variables) in the enchanted code editor and run them to reveal the secret escape passage!"
+
+Objective: Players must type or correct the variable assignments in the in-game code editor. Once they execute it correctly, they receive this output:
+
+yaml
+Copy
+Edit
+Room 3A : Games Room
+Room 3B : Dance Room
+Room 3C : Music Room
+🎭 Final Message from the Ghost:
+"Ah, you have mastered the art of storing memories! The door creaks open... but more trials await ahead!"
+
+This approach makes learning variables interactive, engaging, and rewarding within the CodeEscape game! 🚀👻
