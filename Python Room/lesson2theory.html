@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Variables and Data Types</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2 {
+            color: #444;
+        }
+        code {
+            background: #222;
+            padding: 5px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        pre {
+            background: #222;
+            color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Python Variables and Data Types</h1>
+    
+    <h2>Introduction</h2>
+    <p>Variables and data types are fundamental concepts in programming. A variable stores data in memory, and data types define the kind of data that can be stored.</p>
+    
+    <h2>Declaring Variables</h2>
+    <p>In Python, you can create a variable by assigning a value to a name:</p>
+    <pre><code>x = 10  # Integer variable
+y = "Hello, World!"  # String variable
+z = 3.14  # Float variable</code></pre>
+    
+    <h2>Basic Data Types</h2>
+    <ul>
+        <li><strong>int</strong>: Whole numbers (e.g., 5, -3, 100)</li>
+        <li><strong>float</strong>: Decimal numbers (e.g., 3.14, -2.5)</li>
+        <li><strong>str</strong>: Text values (e.g., "Python", "Hello")</li>
+        <li><strong>bool</strong>: Boolean values (True or False)</li>
+        <li><strong>list</strong>: Ordered, mutable collection (e.g., [1, 2, 3])</li>
+        <li><strong>tuple</strong>: Ordered, immutable collection (e.g., (1, 2, 3))</li>
+        <li><strong>dict</strong>: Key-value pairs (e.g., {"name": "Alice", "age": 25})</li>
+    </ul>
+    
+    <h2>Examples</h2>
+    <pre><code>age = 25  # Integer
+gpa = 3.85  # Float
+name = "Alice"  # String
+is_student = True  # Boolean
+grades = [90, 85, 88]  # List
+student_info = {"name": "Alice", "age": 25}  # Dictionary</code></pre>
+    
+    <h2>Type Checking</h2>
+    <p>Use the <code>type()</code> function to check the type of a variable:</p>
+    <pre><code>print(type(age))  # Output: &lt;class 'int'&gt;
+print(type(name))  # Output: &lt;class 'str'&gt;
+print(type(gpa))  # Output: &lt;class 'float'&gt;</code></pre>
+    
+    <h2>Best Practices</h2>
+    <ul>
+        <li>Use meaningful variable names (e.g., <code>student_name</code> instead of <code>s</code>).</li>
+        <li>Follow Python’s naming convention: lowercase with underscores (e.g., <code>user_age</code>).</li>
+        <li>Avoid using Python keywords as variable names (e.g., <code>class</code>, <code>def</code>).</li>
+    </ul>
+</body>
+</html>

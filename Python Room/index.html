@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 1 : Basic Input Output</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Courier New', monospace;
+    }
+
+    body {
+      background-color: #1a1a1a;
+      color: #f0f0f0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      align-items: center;
+      position: relative;
+    }
+
+    .iframe-section {
+      width: 30%;
+      height: 100%;
+      background-color: #2d2d2d;
+      border: 2px solid #444;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background-color: #333;
+    }
+
+    .image-container {
+      position: relative;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      filter: grayscale(50%) contrast(100%) brightness(80%);
+      position: absolute;
+    }
+
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      z-index: 2;
+      display: none;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      background: rgba(255, 0, 0, 0.3);
+    }
+
+    .hotspot.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .hint-popup {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: none;
+      width: 400px;
+      border: 1px solid #ff0000;
+    }
+
+    .hint-popup.active {
+      display: block;
+    }
+
+    .hint-popup h2 {
+      margin: 0;
+      color: #ff0000;
+    }
+
+    .hint-popup .content {
+      margin-top: 10px;
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+
+    .cancel-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ff5c5c;
+    }
+
+    .cancel-icon:hover {
+      color: #ff0000;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="iframe-section">
+      <iframe id="leftFrame" src="lesson1theory.html"></iframe>
+    </div>
+
+    <div class="image-container">
+      <img id="image1" src="Lesson1.png" alt="Storyline Image">
+      <img id="image2" src="/Photos/Door.png" alt="Door Image" style="opacity: 0; transform: scale(0.8);">
+      
+      <div class="hotspot" id="hotspot1" data-top="62" data-left="85.5" data-width="8" data-height="15"></div>
+      <div class="hotspot" id="hotspot2" data-top="13" data-left="44" data-width="11" data-height="3"></div>
+    </div>
+
+    <div class="iframe-section">
+      <iframe id="rightFrame" src="code_editor.html"></iframe>
+    </div>
+  </div>
+
+  <div id="hintPopup1" class="hint-popup">
+    <span class="cancel-icon" onclick="closeHint('hintPopup1')">×</span>
+    <h2>Hint 1</h2>
+    <div class="content">Find the code and print it</div>
+  </div>
+
+  <div id="hintPopup2" class="hint-popup">
+    <span class="cancel-icon" onclick="closeHint('hintPopup2')">×</span>
+    <h2>Hint 2</h2>
+    <div class="content">Code : SBFECK2345</div>
+  </div>
+
+  <script>
+    window.addEventListener("message", function(event) {
+      if (event.data && event.data.type === "pythonExecution") {
+        const outputText = event.data.output.trim();
+        console.log("Received Output:", outputText);
+
+        if (outputText === "SBFECK2345") {
+          console.log("Error opening door");
+          window.location.href = "lesson2.html";
+        } else {
+          console.log("Incorrect Code");
+        }
+      }
+    }, false);
+
+    function updateHotspots() {
+      const image = document.getElementById("image1");
+      const hotspots = document.querySelectorAll(".hotspot");
+      const rect = image.getBoundingClientRect();
+
+      hotspots.forEach(hotspot => {
+        const topPercent = parseFloat(hotspot.dataset.top);
+        const leftPercent = parseFloat(hotspot.dataset.left);
+        const widthPercent = parseFloat(hotspot.dataset.width);
+        const heightPercent = parseFloat(hotspot.dataset.height);
+
+        hotspot.style.top = `${rect.height * (topPercent / 100)}px`;
+        hotspot.style.left = `${rect.width * (leftPercent / 100)}px`;
+        hotspot.style.width = `${rect.width * (widthPercent / 100)}px`;
+        hotspot.style.height = `${rect.height * (heightPercent / 100)}px`;
+      });
+    }
+
+    window.addEventListener("resize", updateHotspots);
+    window.addEventListener("load", updateHotspots);
+
+    document.getElementById('hotspot1').addEventListener('click', function() {
+      showHint('hintPopup1');
+    });
+
+    document.getElementById('hotspot2').addEventListener('click', function() {
+      showHint('hintPopup2');
+    });
+
+    function showHint(popupId) {
+      document.getElementById(popupId).classList.add('active');
+    }
+
+    function closeHint(popupId) {
+      document.getElementById(popupId).classList.remove('active');
+    }
+
+    document.getElementById('hotspot1').classList.add('active');
+    document.getElementById('hotspot2').classList.add('active');
+  </script>
+
+</body>
+</html>
