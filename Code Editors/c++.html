@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escape Room C++ Code Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #1e1e2f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin: 20px 0;
+      font-size: 1.8rem;
+      color: #ffa7c4;
+    }
+
+    #editor-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+      background: #2b2b3a;
+      border: 2px solid #ffa7c4;
+      border-radius: 10px;
+    }
+
+    #editor {
+      height: 300px;
+      font-size: 14px;
+    }
+
+    #run-button {
+      margin: 10px 0;
+      padding: 10px 20px;
+      background-color: #ff79c6;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    #run-button:hover {
+      background-color: #bd6f9d;
+    }
+
+    #output {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #2b2b3a;
+      border: 2px solid #ffa7c4;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+
+    /* Output Styles */
+    #output.success {
+      color: #50fa7b; /* Green for success */
+    }
+
+    #output.error {
+      color: #ff5555; /* Red for errors */
+    }
+  </style>
+</head>
+<body>
+
+<h1>Escape Room C++ Code Editor</h1>
+<div id="editor-container">
+  <textarea id="editor"></textarea>
+</div>
+<button id="run-button">Run Code</button>
+<div id="output">Output will appear here...</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+<script>
+  // Initialize CodeMirror editor
+  const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+    mode: 'text/x-c++src',
+    lineNumbers: true,
+    theme: 'dracula',
+    matchBrackets: true,
+    autoCloseBrackets: true,
+  });
+
+  const runButton = document.getElementById('run-button');
+  const outputDiv = document.getElementById('output');
+
+  // Run code when the button is clicked
+  runButton.addEventListener('click', () => {
+    const code = editor.getValue();
+    outputDiv.textContent = "Running your code...";
+    outputDiv.className = ""; // Reset output styles
+
+    const data = JSON.stringify({
+      source_code: code,
+      language_id: 54, // 54 is the language ID for C++
+      stdin: "" // Add input if needed
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener('readystatechange', function () {
+      if (this.readyState === this.DONE) {
+        const response = JSON.parse(this.responseText);
+
+        if (response.stdout) {
+          outputDiv.textContent = `Output:\n${response.stdout}`;
+          outputDiv.className = "success";
+        } else if (response.stderr) {
+          outputDiv.textContent = `Runtime Error:\n${response.stderr}`;
+          outputDiv.className = "error";
+        } else if (response.compile_output) {
+          outputDiv.textContent = `Compilation Error:\n${response.compile_output}`;
+          outputDiv.className = "error";
+        } else {
+          outputDiv.textContent = "No output generated.";
+          outputDiv.className = "error";
+        }
+      }
+    });
+
+    xhr.open('POST', 'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true');
+    xhr.setRequestHeader('content-type', 'application/json');
+    xhr.setRequestHeader('x-rapidapi-key', 'cb6257840amshc3a3e5e646219f0p15de82jsnd00af8bb10a5');
+    xhr.setRequestHeader('x-rapidapi-host', 'judge0-ce.p.rapidapi.com');
+
+    xhr.send(data);
+  });
+</script>
+
+</body>
+</html>
