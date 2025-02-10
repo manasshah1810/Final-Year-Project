@@ -1,0 +1,120 @@
+/* Horror Escape Room CodeMirror Theme */
+.cm-s-horror-theme {
+    /* Editor Background & Text */
+    background: rgb(13, 13, 13);
+    color: rgb(215, 187, 168);
+}
+
+/* Caret */
+.cm-s-horror-theme .CodeMirror-cursor {
+    border-left: 2px solid rgb(255, 49, 49);
+}
+
+/* Selection */
+.cm-s-horror-theme .CodeMirror-selected {
+    background: rgb(102, 34, 34);
+}
+
+/* Line Highlight */
+.cm-s-horror-theme .CodeMirror-activeline-background {
+    background: rgb(26, 26, 26);
+}
+
+/* Gutter */
+.cm-s-horror-theme .CodeMirror-gutters {
+    background: rgb(10, 10, 10);
+    color: rgb(77, 77, 77);
+}
+
+/* Comments */
+.cm-s-horror-theme .cm-comment {
+    color: rgb(90, 90, 90);
+    font-style: italic;
+}
+
+/* Variables */
+.cm-s-horror-theme .cm-variable {
+    color: rgb(199, 120, 76);
+}
+
+/* Strings */
+.cm-s-horror-theme .cm-string {
+    color: rgb(154, 51, 36);
+}
+
+/* Numbers */
+.cm-s-horror-theme .cm-number {
+    color: rgb(217, 119, 119);
+}
+
+/* Booleans */
+.cm-s-horror-theme .cm-atom {
+    color: rgb(255, 71, 71);
+    font-weight: bold;
+}
+
+/* Constants */
+.cm-s-horror-theme .cm-def {
+    color: rgb(191, 63, 63);
+}
+
+/* Operators */
+.cm-s-horror-theme .cm-operator {
+    color: rgb(255, 107, 107);
+}
+
+/* Keywords */
+.cm-s-horror-theme .cm-keyword {
+    color: rgb(175, 26, 26);
+    font-weight: bold;
+}
+
+/* Class Names */
+.cm-s-horror-theme .cm-variable-2 {
+    color: rgb(126, 42, 42);
+}
+
+/* Type Definitions */
+.cm-s-horror-theme .cm-variable-3 {
+    color: rgb(139, 61, 61);
+}
+
+/* Type Names */
+.cm-s-horror-theme .cm-type {
+    color: rgb(173, 74, 74);
+}
+
+/* HTML Brackets */
+.cm-s-horror-theme .cm-tag.cm-bracket {
+    color: rgb(178, 34, 34);
+}
+
+/* HTML Tags */
+.cm-s-horror-theme .cm-tag {
+    color: rgb(230, 57, 70);
+}
+
+/* HTML Attributes */
+.cm-s-horror-theme .cm-attribute {
+    color: rgb(199, 113, 113);
+}
+
+/* Apply Theme */
+.CodeMirror {
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+}
+
+/* Optional: Scrollbar Styling for a Horror Effect */
+.cm-s-horror-theme ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cm-s-horror-theme ::-webkit-scrollbar-thumb {
+    background: rgb(77, 0, 0);
+    border-radius: 4px;
+}
+
+.cm-s-horror-theme ::-webkit-scrollbar-track {
+    background: rgb(10, 10, 10);
+}

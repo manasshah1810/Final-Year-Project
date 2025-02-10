@@ -1,0 +1,120 @@
+/* Futuristic Robot Factory CodeMirror Theme */
+.cm-s-robot-factory {
+    /* Editor Background & Text */
+    background: rgb(10, 12, 18);
+    color: rgb(200, 255, 245);
+}
+
+/* Caret */
+.cm-s-robot-factory .CodeMirror-cursor {
+    border-left: 2px solid rgb(0, 255, 170);
+}
+
+/* Selection */
+.cm-s-robot-factory .CodeMirror-selected {
+    background: rgb(25, 40, 60);
+}
+
+/* Line Highlight */
+.cm-s-robot-factory .CodeMirror-activeline-background {
+    background: rgb(20, 25, 35);
+}
+
+/* Gutter */
+.cm-s-robot-factory .CodeMirror-gutters {
+    background: rgb(8, 10, 15);
+    color: rgb(100, 150, 200);
+}
+
+/* Comments */
+.cm-s-robot-factory .cm-comment {
+    color: rgb(80, 120, 180);
+    font-style: italic;
+}
+
+/* Variables */
+.cm-s-robot-factory .cm-variable {
+    color: rgb(255, 215, 0);
+}
+
+/* Strings */
+.cm-s-robot-factory .cm-string {
+    color: rgb(0, 255, 200);
+}
+
+/* Numbers */
+.cm-s-robot-factory .cm-number {
+    color: rgb(255, 85, 85);
+}
+
+/* Booleans */
+.cm-s-robot-factory .cm-atom {
+    color: rgb(255, 165, 0);
+    font-weight: bold;
+}
+
+/* Constants */
+.cm-s-robot-factory .cm-def {
+    color: rgb(0, 200, 255);
+}
+
+/* Operators */
+.cm-s-robot-factory .cm-operator {
+    color: rgb(255, 0, 255);
+}
+
+/* Keywords */
+.cm-s-robot-factory .cm-keyword {
+    color: rgb(0, 255, 170);
+    font-weight: bold;
+}
+
+/* Class Names */
+.cm-s-robot-factory .cm-variable-2 {
+    color: rgb(0, 180, 255);
+}
+
+/* Type Definitions */
+.cm-s-robot-factory .cm-variable-3 {
+    color: rgb(180, 0, 255);
+}
+
+/* Type Names */
+.cm-s-robot-factory .cm-type {
+    color: rgb(0, 255, 255);
+}
+
+/* HTML Brackets */
+.cm-s-robot-factory .cm-tag.cm-bracket {
+    color: rgb(200, 0, 255);
+}
+
+/* HTML Tags */
+.cm-s-robot-factory .cm-tag {
+    color: rgb(0, 255, 130);
+}
+
+/* HTML Attributes */
+.cm-s-robot-factory .cm-attribute {
+    color: rgb(255, 255, 0);
+}
+
+/* Apply Theme */
+.CodeMirror {
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+}
+
+/* Optional: Futuristic Scrollbar */
+.cm-s-robot-factory ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cm-s-robot-factory ::-webkit-scrollbar-thumb {
+    background: rgb(0, 255, 170);
+    border-radius: 4px;
+}
+
+.cm-s-robot-factory ::-webkit-scrollbar-track {
+    background: rgb(10, 12, 18);
+}

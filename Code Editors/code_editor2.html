@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Code Editor & Output Terminal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <style>
+        .body {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            overflow-x: auto;
+            padding: 1rem;
+            line-height: 20px;
+            color: #A2C4E3;
+            /* Light blue for contrast */
+            background: linear-gradient(135deg, #1C0334, #50316A);
+            border: 2px solid #7C65A1;
+            font-family: "Courier New", monospace;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 5px 15px rgba(124, 101, 161, 0.3);
+        }
+
+        /* Scrollbar Styling */
+        .body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .body::-webkit-scrollbar-thumb {
+            background: #7C65A1;
+            border-radius: 4px;
+        }
+
+        .body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        /* Copy Button Style */
+        .copy_toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            border: 1px solid #A2C4E3;
+            background: #2a1f3b;
+            color: #A2C4E3;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .copy_toggle:hover {
+            background: #50316A;
+            border-color: #9AA1D2;
+        }
+
+        .copy_toggle>svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .copy_toggle:hover>svg {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="editor-container">
+        <div class="top-bar">
+            <div class="dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+            </div>
+            <p class="g-color">_&gt;</p>
+        </div>
+        <textarea id="editor"></textarea>
+    </div>
+
+    <a href="#" id="run-button" class="btn">
+        Run Code
+    </a>
+
+    <div class="card">
+        <div class="wrap">
+            <hgroup class="head">
+                <p class="title">
+                    <svg width="16px" height="16px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2"
+                        stroke="currentColor" fill="none">
+                        <path
+                            d="M7 15L10 12L7 9M13 15H17M7.8 21H16.2C17.8802 21 18.7202 21 19.362 20.673C19.9265 20.3854 20.3854 19.9265 20.673 19.362C21 18.7202 21 17.8802 21 16.2V7.8C21 6.11984 21 5.27976 20.673 4.63803C20.3854 4.07354 19.9265 3.6146 19.362 3.32698C18.7202 3 17.8802 3 16.2 3H7.8C6.11984 3 5.27976 3 4.63803 3.32698C4.07354 3.6146 3.6146 4.07354 3.32698 4.63803C3 5.27976 3 6.11984 3 7.8V16.2C3 17.8802 3 18.7202 3.32698 19.362C3.6146 19.9265 4.07354 20.3854 4.63803 20.673C5.27976 21 6.11984 21 7.8 21Z">
+                        </path>
+                    </svg>
+                    Terminal
+                </p>
+
+                <button class="copy_toggle" tabindex="-1" type="button">
+                    <svg width="16px" height="16px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2"
+                        stroke="currentColor" fill="none">
+                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
+                        </path>
+                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                    </svg>
+                </button>
+            </hgroup>
+            <div class="body" id="output">Output will appear here...</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+
+    <script>
+        window.addEventListener("load", async function () {
+            var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+                mode: "python",
+                lineNumbers: true,
+                theme: "dracula",
+                lineWrapping: true,
+                autofocus: true
+            });
+
+            document.querySelector(".CodeMirror").style.height = "1000px";
+
+            const outputDiv = document.getElementById("output");
+            const runButton = document.getElementById("run-button");
+
+            async function loadPyodideAndRun() {
+                outputDiv.textContent = "Loading Pyodide...";
+                const pyodide = await loadPyodide();
+                outputDiv.textContent = 'Solve the Mystery';
+
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue();
+                    try {
+                        pyodide.runPython(`import sys\nfrom io import StringIO\nsys.stdout = sys.stderr = StringIO()`);
+                        await pyodide.runPythonAsync(code);
+                        outputDiv.textContent = pyodide.runPython("sys.stdout.getvalue()") || "Execution finished without output.";
+                        sendCodeAndOutput(code, outputDiv.textContent);
+                    } catch (error) {
+                        outputDiv.textContent = `Error: ${error.message}`;
+                        sendCodeAndOutput(code, `Error: ${error.message}`);
+                    }
+                });
+            }
+            function sendCodeAndOutput(userCode, outputText) {
+                window.parent.postMessage(
+                    {
+                        type: "pythonExecution",
+                        output: outputText.trim(),
+                        userCode: userCode.trim(),
+                    },
+                    "*"
+                );
+            }
+
+            loadPyodideAndRun();
+        });
+    </script>
+</body>
+
+</html>

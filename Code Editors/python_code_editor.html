@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <link rel="stylesheet" href="python_theme.css">
+    <style>
+        .body {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            overflow-x: auto;
+            padding: 1rem;
+            line-height: 20px;
+            color: #A2C4E3;
+            /* Light blue for contrast */
+            background: linear-gradient(135deg, #1C0334, #50316A);
+            border: 2px solid #7C65A1;
+            font-family: "Courier New", monospace;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0px 5px 15px rgba(124, 101, 161, 0.3);
+        }
+
+        /* Scrollbar Styling */
+        .body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .body::-webkit-scrollbar-thumb {
+            background: #7C65A1;
+            border-radius: 4px;
+        }
+
+        .body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        .btn {
+  all: unset;
+  display: inline-block;
+  width: 200px;
+  height: 50px;
+  margin: 10px; /* Adjust margin as needed */
+  font-size: 12px;
+  font-weight: 600;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  text-align: center;
+  border: 2px solid #1A1A1A;
+  border-radius: 5px; /* Reduced for a compact look */
+  background: #000;
+  color: #FFF;
+  cursor: pointer;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover { box-shadow: rgba(0, 0, 0, 0.25) 0 4px 8px; transform: translateY(-1px); }
+.btn:active { box-shadow: none; transform: translateY(0); }
+.btn:disabled { pointer-events: none; opacity: 0.5; }
+
+.center-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+}
+
+
+    </style>
+</head>
+
+<body>
+        <textarea id="editor"></textarea>
+    </div>
+
+    <div class="center_container">
+    <button id="run-button" class="btn">
+        Run Code
+    </button>
+    </div>
+
+    <div class="card">
+        <div class="wrap">
+            <hgroup class="head">
+                <p class="title">
+                </p>
+            </hgroup>
+            <div class="body" id="output">Output will appear here...</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+
+    <script>
+        window.addEventListener("load", async function () {
+            var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+                mode: "python",
+                lineNumbers: true,
+                theme: "robot-factory",
+                lineWrapping: true,
+                autofocus: true
+            });
+
+            document.querySelector(".CodeMirror").style.height = "500px";
+
+            const outputDiv = document.getElementById("output");
+            const runButton = document.getElementById("run-button");
+
+            async function loadPyodideAndRun() {
+                outputDiv.textContent = "Loading Pyodide...";
+                const pyodide = await loadPyodide();
+                outputDiv.textContent = 'Solve the Mystery';
+
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue();
+                    try {
+                        pyodide.runPython(`import sys\nfrom io import StringIO\nsys.stdout = sys.stderr = StringIO()`);
+                        await pyodide.runPythonAsync(code);
+                        outputDiv.textContent = pyodide.runPython("sys.stdout.getvalue()") || "Execution finished without output.";
+                        sendCodeAndOutput(code, outputDiv.textContent);
+                    } catch (error) {
+                        outputDiv.textContent = `Error: ${error.message}`;
+                        sendCodeAndOutput(code, `Error: ${error.message}`);
+                    }
+                });
+            }
+            function sendCodeAndOutput(userCode, outputText) {
+                window.parent.postMessage(
+                    {
+                        type: "pythonExecution",
+                        output: outputText.trim(),
+                        userCode: userCode.trim(),
+                    },
+                    "*"
+                );
+            }
+
+            loadPyodideAndRun();
+        });
+    </script>
+</body>
+
+</html>

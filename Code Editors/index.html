@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Java Compiler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        pre {
+            width: 80%;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Online Java Compiler</h2>
+    <textarea id="code" placeholder="Write your Java code here...">public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</textarea>
+    <button onclick="compileCode()">Run Code</button>
+    <h3>Output:</h3>
+    <pre id="output">Waiting for execution...</pre>
+
+    <script>
+        function compileCode() {
+            const code = document.getElementById('code').value;
+            const outputElement = document.getElementById('output');
+
+            const requestData = {
+                source_code: code,
+                language_id: 62,  // 62 is the ID for Java in Judge0 API
+                stdin: "",
+                expected_output: null
+            };
+
+            const apiKey = "b0a3ed282bmsh503d858971bd3bcp1026b1jsn67c3a5bb0d1d";
+            
+            fetch("https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-rapidapi-key": 'b0a3ed282bmsh503d858971bd3bcp1026b1jsn67c3a5bb0d1d',
+                    "x-rapidapi-host": "judge0-ce.p.rapidapi.com"
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.stdout) {
+                    outputElement.textContent = data.stdout;
+                } else if (data.stderr) {
+                    outputElement.textContent = "Error: " + data.stderr;
+                } else {
+                    outputElement.textContent = "Compilation failed.";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                outputElement.textContent = "An error occurred.";
+            });
+        }
+    </script>
+
+</body>
+</html>
